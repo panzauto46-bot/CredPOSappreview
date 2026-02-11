@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { transactionStorage } from '../utils/storage';
-import { settingsStorage } from '../utils/settings';
 import { Transaction } from '../types';
 import { useAuth } from '../context/AuthContext';
-import {
-  ArrowLeft,
+import { 
+  ArrowLeft, 
   Download,
   TrendingUp,
   Wallet,
@@ -39,7 +38,11 @@ export const SettlementPage: React.FC = () => {
   };
 
   const formatCurrency = (amount: number) => {
-    return settingsStorage.formatCurrency(amount);
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+    }).format(amount);
   };
 
   const getTotalByMethod = (method: 'cash' | 'qris' | 'transfer') => {
@@ -61,7 +64,7 @@ export const SettlementPage: React.FC = () => {
     setTimeout(() => setShowExportSuccess(false), 2000);
   };
 
-  const today = new Date().toLocaleDateString('en-US', {
+  const today = new Date().toLocaleDateString('id-ID', {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
@@ -74,7 +77,7 @@ export const SettlementPage: React.FC = () => {
       <div className="bg-[#0F172A] pt-12 pb-20 px-4">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <button
+            <button 
               onClick={() => navigate('/dashboard')}
               className="p-2 bg-white/10 rounded-xl text-white"
             >
@@ -101,7 +104,7 @@ export const SettlementPage: React.FC = () => {
       <div className="px-4 -mt-14">
         <div className="bg-white rounded-2xl shadow-lg p-5 mb-4">
           <div className="text-center mb-6">
-            <p className="text-gray-500 text-sm mb-1">Today's Total Revenue</p>
+            <p className="text-gray-500 text-sm mb-1">Total Omzet Hari Ini</p>
             {isLoading ? (
               <div className="h-10 bg-gray-100 rounded-lg animate-pulse w-48 mx-auto"></div>
             ) : (
@@ -111,7 +114,7 @@ export const SettlementPage: React.FC = () => {
               <div className="w-8 h-8 bg-[#10B981]/10 rounded-full flex items-center justify-center">
                 <TrendingUp className="w-4 h-4 text-[#10B981]" />
               </div>
-              <span className="text-sm text-gray-600">{totalTransactions} transactions</span>
+              <span className="text-sm text-gray-600">{totalTransactions} transaksi</span>
             </div>
           </div>
 
@@ -119,16 +122,16 @@ export const SettlementPage: React.FC = () => {
           {totalAmount > 0 && (
             <div className="mb-6">
               <div className="flex rounded-full overflow-hidden h-3">
-                <div
-                  className="bg-green-500"
+                <div 
+                  className="bg-green-500" 
                   style={{ width: `${(getTotalByMethod('cash') / totalAmount) * 100}%` }}
                 />
-                <div
-                  className="bg-blue-500"
+                <div 
+                  className="bg-blue-500" 
                   style={{ width: `${(getTotalByMethod('qris') / totalAmount) * 100}%` }}
                 />
-                <div
-                  className="bg-purple-500"
+                <div 
+                  className="bg-purple-500" 
                   style={{ width: `${(getTotalByMethod('transfer') / totalAmount) * 100}%` }}
                 />
               </div>
@@ -143,8 +146,8 @@ export const SettlementPage: React.FC = () => {
                   <Wallet className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-[#0F172A]">Cash</h4>
-                  <p className="text-xs text-gray-500">{getCountByMethod('cash')} transactions</p>
+                  <h4 className="font-semibold text-[#0F172A]">Tunai</h4>
+                  <p className="text-xs text-gray-500">{getCountByMethod('cash')} transaksi</p>
                 </div>
               </div>
               <span className="font-bold text-green-600">{formatCurrency(getTotalByMethod('cash'))}</span>
@@ -157,7 +160,7 @@ export const SettlementPage: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="font-semibold text-[#0F172A]">QRIS</h4>
-                  <p className="text-xs text-gray-500">{getCountByMethod('qris')} transactions</p>
+                  <p className="text-xs text-gray-500">{getCountByMethod('qris')} transaksi</p>
                 </div>
               </div>
               <span className="font-bold text-blue-600">{formatCurrency(getTotalByMethod('qris'))}</span>
@@ -170,7 +173,7 @@ export const SettlementPage: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="font-semibold text-[#0F172A]">Transfer</h4>
-                  <p className="text-xs text-gray-500">{getCountByMethod('transfer')} transactions</p>
+                  <p className="text-xs text-gray-500">{getCountByMethod('transfer')} transaksi</p>
                 </div>
               </div>
               <span className="font-bold text-purple-600">{formatCurrency(getTotalByMethod('transfer'))}</span>
@@ -180,19 +183,19 @@ export const SettlementPage: React.FC = () => {
 
         {/* Business Info */}
         <div className="bg-white rounded-2xl shadow-lg p-5 mb-4">
-          <h3 className="font-semibold text-[#0F172A] mb-4">Business Information</h3>
+          <h3 className="font-semibold text-[#0F172A] mb-4">Informasi Bisnis</h3>
           <div className="space-y-3">
             <div className="flex justify-between">
-              <span className="text-gray-500">Business Name</span>
+              <span className="text-gray-500">Nama Usaha</span>
               <span className="font-medium text-[#0F172A]">{user?.businessName}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">Owner</span>
+              <span className="text-gray-500">Pemilik</span>
               <span className="font-medium text-[#0F172A]">{user?.ownerName}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">Settlement Date</span>
-              <span className="font-medium text-[#0F172A]">{new Date().toLocaleDateString('en-US')}</span>
+              <span className="text-gray-500">Tanggal Settlement</span>
+              <span className="font-medium text-[#0F172A]">{new Date().toLocaleDateString('id-ID')}</span>
             </div>
           </div>
         </div>
@@ -208,20 +211,20 @@ export const SettlementPage: React.FC = () => {
               <p className="text-xs text-gray-400">Blockchain Ready Data</p>
             </div>
           </div>
-
+          
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div className="bg-white/10 rounded-xl p-3">
-              <p className="text-gray-400 text-xs mb-1">Consistency</p>
-              <p className="text-white font-bold text-lg">Good</p>
+              <p className="text-gray-400 text-xs mb-1">Konsistensi</p>
+              <p className="text-white font-bold text-lg">Baik</p>
             </div>
             <div className="bg-white/10 rounded-xl p-3">
-              <p className="text-gray-400 text-xs mb-1">Data Collected</p>
+              <p className="text-gray-400 text-xs mb-1">Data Terkumpul</p>
               <p className="text-white font-bold text-lg">{totalTransactions} Txn</p>
             </div>
           </div>
 
           <p className="text-xs text-gray-400">
-            Your settlement data is encrypted and ready for credit assessment on Tezos blockchain.
+            Data settlement Anda dienkripsi dan siap untuk penilaian kredit di blockchain Tezos.
           </p>
         </div>
       </div>
@@ -230,7 +233,7 @@ export const SettlementPage: React.FC = () => {
       {showExportSuccess && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#10B981] text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 animate-bounce-in z-50">
           <CheckCircle2 className="w-5 h-5" />
-          <span className="font-medium">Data exported successfully!</span>
+          <span className="font-medium">Data berhasil diexport!</span>
         </div>
       )}
     </div>

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { transactionStorage } from '../utils/storage';
-import { settingsStorage } from '../utils/settings';
 import { Transaction } from '../types';
-import {
-  ArrowLeft,
-  Loader2,
+import { 
+  ArrowLeft, 
+  Loader2, 
   Receipt,
   Clock,
   Wallet,
@@ -39,11 +38,15 @@ export const HistoryPage: React.FC = () => {
   };
 
   const formatCurrency = (amount: number) => {
-    return settingsStorage.formatCurrency(amount);
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+    }).format(amount);
   };
 
   const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleDateString('en-US', {
+    return new Date(timestamp).toLocaleDateString('id-ID', {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
@@ -51,7 +54,7 @@ export const HistoryPage: React.FC = () => {
   };
 
   const formatTime = (timestamp: number) => {
-    return new Date(timestamp).toLocaleTimeString('en-US', {
+    return new Date(timestamp).toLocaleTimeString('id-ID', {
       hour: '2-digit',
       minute: '2-digit',
     });
@@ -73,7 +76,7 @@ export const HistoryPage: React.FC = () => {
   const getPaymentLabel = (method: string) => {
     switch (method) {
       case 'cash':
-        return 'Cash';
+        return 'Tunai';
       case 'qris':
         return 'QRIS';
       case 'transfer':
@@ -107,43 +110,46 @@ export const HistoryPage: React.FC = () => {
       {/* Header */}
       <div className="bg-[#0F172A] pt-12 pb-6 px-4">
         <div className="flex items-center gap-3 mb-4">
-          <button
+          <button 
             onClick={() => navigate('/dashboard')}
             className="p-2 bg-white/10 rounded-xl text-white"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <h1 className="text-xl font-bold text-white">Transaction History</h1>
+          <h1 className="text-xl font-bold text-white">Riwayat Transaksi</h1>
         </div>
 
         {/* Filter Pills */}
         <div className="flex gap-2">
           <button
             onClick={() => setFilter('all')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${filter === 'all'
-              ? 'bg-[#2C7DF7] text-white'
-              : 'bg-white/10 text-gray-400'
-              }`}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              filter === 'all' 
+                ? 'bg-[#2C7DF7] text-white' 
+                : 'bg-white/10 text-gray-400'
+            }`}
           >
-            All
+            Semua
           </button>
           <button
             onClick={() => setFilter('today')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${filter === 'today'
-              ? 'bg-[#2C7DF7] text-white'
-              : 'bg-white/10 text-gray-400'
-              }`}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              filter === 'today' 
+                ? 'bg-[#2C7DF7] text-white' 
+                : 'bg-white/10 text-gray-400'
+            }`}
           >
-            Today
+            Hari Ini
           </button>
           <button
             onClick={() => setFilter('week')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${filter === 'week'
-              ? 'bg-[#2C7DF7] text-white'
-              : 'bg-white/10 text-gray-400'
-              }`}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              filter === 'week' 
+                ? 'bg-[#2C7DF7] text-white' 
+                : 'bg-white/10 text-gray-400'
+            }`}
           >
-            7 Days
+            7 Hari
           </button>
         </div>
       </div>
@@ -153,7 +159,7 @@ export const HistoryPage: React.FC = () => {
         <div className="bg-gradient-to-r from-[#2C7DF7] to-[#1E5FC7] rounded-xl p-4 mb-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-white/80 text-sm">Total ({filteredTransactions.length} transactions)</p>
+              <p className="text-white/80 text-sm">Total ({filteredTransactions.length} transaksi)</p>
               <p className="text-2xl font-bold text-white">{formatCurrency(totalFiltered)}</p>
             </div>
             <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
@@ -172,13 +178,13 @@ export const HistoryPage: React.FC = () => {
         ) : filteredTransactions.length === 0 ? (
           <div className="text-center py-12">
             <Receipt className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">No transactions yet</h3>
-            <p className="text-gray-500 text-sm">Transactions will appear here</p>
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">Belum ada transaksi</h3>
+            <p className="text-gray-500 text-sm">Transaksi akan muncul di sini</p>
           </div>
         ) : (
           <div className="space-y-3">
             {filteredTransactions.map((transaction) => (
-              <div
+              <div 
                 key={transaction.id}
                 className="bg-white rounded-xl shadow-sm overflow-hidden"
               >
@@ -200,12 +206,13 @@ export const HistoryPage: React.FC = () => {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${transaction.paymentMethod === 'cash'
-                        ? 'bg-green-100 text-green-700'
-                        : transaction.paymentMethod === 'qris'
-                          ? 'bg-blue-100 text-blue-700'
-                          : 'bg-purple-100 text-purple-700'
-                        }`}>
+                      <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
+                        transaction.paymentMethod === 'cash' 
+                          ? 'bg-green-100 text-green-700'
+                          : transaction.paymentMethod === 'qris'
+                            ? 'bg-blue-100 text-blue-700'
+                            : 'bg-purple-100 text-purple-700'
+                      }`}>
                         {getPaymentIcon(transaction.paymentMethod)}
                         <span>{getPaymentLabel(transaction.paymentMethod)}</span>
                       </div>
@@ -221,7 +228,7 @@ export const HistoryPage: React.FC = () => {
                 {/* Expanded Items */}
                 {expandedId === transaction.id && (
                   <div className="px-4 pb-4 border-t border-gray-100 pt-3">
-                    <h4 className="text-xs font-semibold text-gray-500 mb-2">ITEM DETAILS</h4>
+                    <h4 className="text-xs font-semibold text-gray-500 mb-2">DETAIL ITEM</h4>
                     <div className="space-y-2">
                       {transaction.items.map((item, idx) => (
                         <div key={idx} className="flex items-center justify-between text-sm">

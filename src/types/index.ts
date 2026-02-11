@@ -4,7 +4,6 @@ export interface Product {
   name: string;
   price: number;
   stock: number;
-  category?: 'food' | 'drink' | 'snacks';
   imageUrl?: string;
   createdAt: number;
 }
@@ -32,7 +31,6 @@ export interface User {
   businessName: string;
   ownerName: string;
   createdAt: number;
-  photoURL?: string;
 }
 
 // Auth State

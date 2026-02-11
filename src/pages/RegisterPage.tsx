@@ -11,7 +11,7 @@ export const RegisterPage: React.FC = () => {
   const [ownerName, setOwnerName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-
+  
   const { register } = useAuth();
   const navigate = useNavigate();
 
@@ -20,22 +20,22 @@ export const RegisterPage: React.FC = () => {
     setError('');
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError('Password tidak cocok');
       return;
     }
 
     if (password.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError('Password minimal 6 karakter');
       return;
     }
 
     setIsLoading(true);
-
+    
     try {
       await register(email, password, businessName, ownerName);
       navigate('/dashboard');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Registration failed');
+      setError(err instanceof Error ? err.message : 'Registrasi gagal');
     } finally {
       setIsLoading(false);
     }
@@ -55,14 +55,14 @@ export const RegisterPage: React.FC = () => {
         <div className="w-16 h-16 bg-gradient-to-br from-[#2C7DF7] to-[#1E5FC7] rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30 mb-4">
           <Store className="w-8 h-8 text-white" />
         </div>
-        <h1 className="text-2xl font-bold text-white mb-1">Register CredPOS</h1>
-        <p className="text-gray-400 text-sm text-center">Start managing your business better</p>
+        <h1 className="text-2xl font-bold text-white mb-1">Daftar CredPOS</h1>
+        <p className="text-gray-400 text-sm text-center">Mulai kelola bisnis Anda dengan lebih baik</p>
       </div>
 
       {/* Register Form Card */}
       <div className="flex-1 bg-white rounded-t-[32px] px-6 py-8 shadow-xl overflow-auto">
-        <h2 className="text-lg font-bold text-[#0F172A] mb-6">Account Information</h2>
-
+        <h2 className="text-lg font-bold text-[#0F172A] mb-6">Informasi Akun</h2>
+        
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl mb-4 text-sm">
             {error}
@@ -71,14 +71,14 @@ export const RegisterPage: React.FC = () => {
 
         <form onSubmit={handleRegister} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Business Name</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Nama Usaha</label>
             <div className="relative">
               <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
                 value={businessName}
                 onChange={(e) => setBusinessName(e.target.value)}
-                placeholder="My Coffee Shop"
+                placeholder="Warung Pak Budi"
                 className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2C7DF7] focus:border-transparent transition-all"
                 required
               />
@@ -86,14 +86,14 @@ export const RegisterPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Owner Name</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Nama Pemilik</label>
             <div className="relative">
               <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
                 value={ownerName}
                 onChange={(e) => setOwnerName(e.target.value)}
-                placeholder="John Doe"
+                placeholder="Budi Santoso"
                 className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2C7DF7] focus:border-transparent transition-all"
                 required
               />
@@ -108,7 +108,7 @@ export const RegisterPage: React.FC = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="email@business.com"
+                placeholder="email@usaha.com"
                 className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2C7DF7] focus:border-transparent transition-all"
                 required
               />
@@ -123,7 +123,7 @@ export const RegisterPage: React.FC = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Minimum 6 characters"
+                placeholder="Minimal 6 karakter"
                 className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2C7DF7] focus:border-transparent transition-all"
                 required
               />
@@ -131,14 +131,14 @@ export const RegisterPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Confirm Password</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Konfirmasi Password</label>
             <div className="relative">
               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Repeat password"
+                placeholder="Ulangi password"
                 className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2C7DF7] focus:border-transparent transition-all"
                 required
               />
@@ -153,19 +153,19 @@ export const RegisterPage: React.FC = () => {
             {isLoading ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                <span>Registering...</span>
+                <span>Mendaftar...</span>
               </>
             ) : (
-              'Register Now'
+              'Daftar Sekarang'
             )}
           </button>
         </form>
 
         {/* Login Link */}
         <p className="text-center mt-6 text-gray-600">
-          Already have an account?{' '}
+          Sudah punya akun?{' '}
           <Link to="/login" className="text-[#2C7DF7] font-semibold hover:underline">
-            Sign In
+            Masuk
           </Link>
         </p>
       </div>

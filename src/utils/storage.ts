@@ -1,5 +1,5 @@
-// Firebase simulation with LocalStorage
-// Can be easily replaced with actual Firebase
+// Simulasi Firebase dengan LocalStorage
+// Dapat dengan mudah diganti dengan Firebase sebenarnya
 
 import { Product, Transaction, User } from '../types';
 
@@ -10,31 +10,31 @@ const KEYS = {
   USERS: 'credpos_users',
 };
 
-// Demo data for Demo Login feature
+// Demo data untuk fitur Demo Login
 const DEMO_USER: User = {
   id: 'demo-user-001',
-  email: 'demo@credpos.com',
-  businessName: 'Demo CredPOS Store',
+  email: 'demo@credpos.id',
+  businessName: 'Warung Demo CredPOS',
   ownerName: 'Demo User',
   createdAt: Date.now(),
 };
 
 const DEMO_PRODUCTS: Product[] = [
-  { id: 'p1', name: 'Latte Coffee', price: 5, stock: 50, createdAt: Date.now() },
-  { id: 'p2', name: 'Iced Tea', price: 3, stock: 100, createdAt: Date.now() },
-  { id: 'p3', name: 'Fried Rice', price: 8, stock: 30, createdAt: Date.now() },
-  { id: 'p4', name: 'Fried Noodles', price: 7, stock: 35, createdAt: Date.now() },
-  { id: 'p5', name: 'Crispy Chicken', price: 9, stock: 25, createdAt: Date.now() },
-  { id: 'p6', name: 'Orange Juice', price: 4, stock: 80, createdAt: Date.now() },
-  { id: 'p7', name: 'Toast Bread', price: 5, stock: 40, createdAt: Date.now() },
-  { id: 'p8', name: 'Instant Noodles', price: 4, stock: 60, createdAt: Date.now() },
+  { id: 'p1', name: 'Kopi Susu', price: 18000, stock: 50, createdAt: Date.now() },
+  { id: 'p2', name: 'Es Teh Manis', price: 8000, stock: 100, createdAt: Date.now() },
+  { id: 'p3', name: 'Nasi Goreng', price: 25000, stock: 30, createdAt: Date.now() },
+  { id: 'p4', name: 'Mie Goreng', price: 22000, stock: 35, createdAt: Date.now() },
+  { id: 'p5', name: 'Ayam Geprek', price: 28000, stock: 25, createdAt: Date.now() },
+  { id: 'p6', name: 'Es Jeruk', price: 10000, stock: 80, createdAt: Date.now() },
+  { id: 'p7', name: 'Roti Bakar', price: 15000, stock: 40, createdAt: Date.now() },
+  { id: 'p8', name: 'Indomie Rebus', price: 12000, stock: 60, createdAt: Date.now() },
 ];
 
 const DEMO_TRANSACTIONS: Transaction[] = [
   {
     id: 't1',
     timestamp: Date.now() - 3600000,
-    totalAmount: 17,
+    totalAmount: 53000,
     paymentMethod: 'cash',
     items: [
       { product: DEMO_PRODUCTS[0], quantity: 2 },
@@ -46,7 +46,7 @@ const DEMO_TRANSACTIONS: Transaction[] = [
   {
     id: 't2',
     timestamp: Date.now() - 7200000,
-    totalAmount: 25,
+    totalAmount: 75000,
     paymentMethod: 'qris',
     items: [
       { product: DEMO_PRODUCTS[2], quantity: 2 },
@@ -57,7 +57,7 @@ const DEMO_TRANSACTIONS: Transaction[] = [
   {
     id: 't3',
     timestamp: Date.now() - 1800000,
-    totalAmount: 13,
+    totalAmount: 40000,
     paymentMethod: 'transfer',
     items: [
       { product: DEMO_PRODUCTS[1], quantity: 2 },
@@ -75,12 +75,12 @@ export const authStorage = {
         const users = JSON.parse(localStorage.getItem(KEYS.USERS) || '[]') as User[];
         const user = users.find(u => u.email === email);
         console.log('Login attempt with password validation:', !!_password);
-
+        
         if (user) {
           localStorage.setItem(KEYS.USER, JSON.stringify(user));
           resolve(user);
         } else {
-          reject(new Error('Invalid email or password'));
+          reject(new Error('Email atau password salah'));
         }
       }, 800);
     });
@@ -90,19 +90,19 @@ export const authStorage = {
     return new Promise((resolve) => {
       setTimeout(() => {
         localStorage.setItem(KEYS.USER, JSON.stringify(DEMO_USER));
-
+        
         // Set demo products if not exists
         const existingProducts = localStorage.getItem(KEYS.PRODUCTS);
         if (!existingProducts) {
           localStorage.setItem(KEYS.PRODUCTS, JSON.stringify(DEMO_PRODUCTS));
         }
-
+        
         // Set demo transactions
         const existingTransactions = JSON.parse(localStorage.getItem(KEYS.TRANSACTIONS) || '[]');
         if (existingTransactions.length === 0) {
           localStorage.setItem(KEYS.TRANSACTIONS, JSON.stringify(DEMO_TRANSACTIONS));
         }
-
+        
         resolve(DEMO_USER);
       }, 800);
     });
@@ -113,9 +113,9 @@ export const authStorage = {
       setTimeout(() => {
         console.log('Register with password:', !!_password);
         const users = JSON.parse(localStorage.getItem(KEYS.USERS) || '[]') as User[];
-
+        
         if (users.find(u => u.email === email)) {
-          reject(new Error('Email already registered'));
+          reject(new Error('Email sudah terdaftar'));
           return;
         }
 
@@ -243,11 +243,11 @@ export const transactionStorage = {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const todayTimestamp = today.getTime();
-
+      
       const total = transactions
         .filter(t => t.timestamp >= todayTimestamp)
         .reduce((sum, t) => sum + t.totalAmount, 0);
-
+      
       resolve(total);
     });
   },
@@ -258,7 +258,7 @@ export const transactionStorage = {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const todayTimestamp = today.getTime();
-
+      
       const todayTxns = transactions.filter(t => t.timestamp >= todayTimestamp);
       resolve(todayTxns);
     });
