@@ -54,9 +54,10 @@ com.credpos.app
 
 ---
 
+
 ## 🔐 Security & Hackathon Note
 
-This repository is set to **Private** to ensure the integrity of the proprietary algorithms used for the Credit Scoring mechanism during the Hacktoon competition.
+This repository contains the source code for the CredPOS Mobile App.
 
 **For Jury & Evaluators:**
 - **APK Download**: Please verify the functionality using the provided APK file.
